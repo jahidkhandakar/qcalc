@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:qcalc/my_button.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  var userQuestion = '';
+
+  var userAnswer = '';
+
+  final myTextStyle = TextStyle(
+    fontSize: 30,
+    color: Colors.deepPurple[900],
+    fontWeight: FontWeight.bold,
+  );
 
   final List<String> buttons = [
     'C',
@@ -33,7 +48,22 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.deepPurple[100],
       body: Column(
         children: <Widget>[
-          Expanded(child: Container()),
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    alignment: Alignment.centerLeft,
+                    child: Text(userQuestion, style: TextStyle(fontSize: 20)),),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    alignment: Alignment.centerRight,
+                    child: Text(userAnswer, style: TextStyle(fontSize: 20)),),
+                ],
+              ),
+            )),
           Expanded(
             flex: 2,
             child: Container(
@@ -46,19 +76,38 @@ class HomePage extends StatelessWidget {
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   if (index == 0) {
+                    // Clear button
                     return MyButton(
+                      buttonTapped: (){
+                        setState((){
+                          userQuestion = '';
+                          userAnswer = '';
+                        });
+                      },
                       color: Colors.green,
                       textColor: Colors.white,
                       buttonText: buttons[index],
                     );
                   } else if (index == 1) {
+                    // Delete button
                     return MyButton(
+                      buttonTapped: (){
+                        setState((){
+                          userQuestion = userQuestion.substring(0, userQuestion.length - 1);
+                        });
+                      },
                       color: Colors.red,
                       textColor: Colors.white,
                       buttonText: buttons[index],
                     );
                   } else {
+                    // Other buttons
                     return MyButton(
+                      buttonTapped: (){
+                        setState((){
+                          userQuestion += buttons[index];
+                        });
+                      },
                       color: isOperator(buttons[index])
                           ? Colors.deepPurple
                           : Colors.deepPurple[50],
